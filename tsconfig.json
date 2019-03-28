@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "lib",
+    "lib": ["es2015", "dom"],
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "jsx": "react"
+  },
+  "include": ["./src"],
+  "exclude": ["node_modules", "**/__tests__"]
+}
