@@ -1,6 +1,6 @@
 # React Vessel
 
-[![codecov](https://codecov.io/gh/react-vessel/react-vessel/branch/master/graph/badge.svg)](https://codecov.io/gh/react-vessel/react-vessel)
+[![Codecov](https://img.shields.io/codecov/c/github/react-vessel/react-vessel/master.svg)](https://codecov.io/gh/react-vessel/react-vessel) [![CircleCI](https://img.shields.io/circleci/project/github/react-vessel/react-vessel/master.svg)](https://circleci.com/gh/react-vessel/react-vessel)
 
 A vessel for your state
 

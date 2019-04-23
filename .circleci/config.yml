@@ -26,11 +26,6 @@ jobs:
       - run:
           name: Upload Coverage
           command: yarn ci:coverage
-          # command: echo $PATH
-
-      # - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-      #     path: coverage
-      #     prefix: coverage
 
       - save_cache:
           name: Save node_modules cache
