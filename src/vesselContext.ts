@@ -20,6 +20,6 @@ export interface VesselContextType {
 export const VesselContext = React.createContext<VesselContextType>({
   name: '',
   state: {},
-  dispatch: () => {},
-  setReducer: () => {},
+  dispatch: /* istanbul ignore next */ () => {},
+  setReducer: /* istanbul ignore next */ () => {},
 });

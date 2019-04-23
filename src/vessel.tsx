@@ -11,10 +11,12 @@ const RE_REDUCER_KEY = /(.*):(.*)\/(.*)/;
 function parseReducerKey(key: string): [string, string] {
   const match = key.match(RE_REDUCER_KEY);
 
-  if (!match || match.length < 3) {
-    throw new Error('Invalid reducer key');
-  }
-
+  /**
+   * There is only one way to put a reducer into reducer map
+   * and reducer key is validated there
+   * so typescript should just shut up here
+   */
+  // @ts-ignore
   return [match[1], `${match[2]}/${match[3]}`];
 }
 

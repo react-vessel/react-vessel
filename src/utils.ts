@@ -1,5 +1,3 @@
-const MODEL_NAME_MESSAGE = 'Action type should be in the following format: [vessel]/[model]/action';
-
 interface ActionNameParams {
   action: string;
   model?: string;
@@ -16,12 +14,12 @@ export function complementActionName({
   let splits = action.split('/');
 
   if (splits.length > 3) {
-    throw new Error(MODEL_NAME_MESSAGE);
+    throw new Error(`Given action '${action}' does not match the format: [vessel]/[model]/action`);
   }
 
   if (splits.length === 1) {
     if (!model) {
-      throw new Error(MODEL_NAME_MESSAGE);
+      throw new Error(`Could not resolve a model`);
     }
     // action
     splits = [vessel, model, action];

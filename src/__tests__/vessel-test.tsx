@@ -1,8 +1,21 @@
-import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
+import React, { useState } from 'react';
+import { render, fireEvent, cleanup } from 'react-testing-library';
 import { Reducer } from '../reducer';
 
 import { Vessel, useParentState, useParentVessel } from '../vessel';
+import { Model } from '../model';
+import { complementActionName } from '../utils';
+
+const CounterWithModel: React.FC<{ name: string }> = ({ name }) => {
+  return (
+    <>
+      <Model name={name}>
+        <Reducer action="increment" reducer={(state = 0) => state + 1} />
+        <Reducer action="decrement" reducer={(state = 0) => state - 1} />
+      </Model>
+    </>
+  );
+};
 
 const Counter: React.FC<{ name: string }> = ({ name }) => {
   return (
@@ -40,6 +53,8 @@ const CounterButtons: React.FC<{ name: string }> = ({ name }) => {
   );
 };
 
+afterEach(cleanup);
+
 describe('Vessel', () => {
   it('renders without a name', () => {
     const { asFragment } = render(<Vessel />);
@@ -52,8 +67,10 @@ describe('Vessel', () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
+});
 
-  it('works with a counter reducer', () => {
+describe('Reducer', () => {
+  it('works without a model', () => {
     const { container, getByText } = render(
       <Vessel name="test">
         <Counter name="count" />
@@ -66,4 +83,135 @@ describe('Vessel', () => {
     fireEvent.click(getByText('Increment count'));
     expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('1');
   });
+
+  it('works with a model', () => {
+    const { container, getByText } = render(
+      <Vessel name="test1">
+        <CounterWithModel name="count" />
+        <CounterShow name="count" />
+        <CounterButtons name="count" />
+      </Vessel>,
+    );
+
+    expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('0');
+    fireEvent.click(getByText('Increment count'));
+    expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('1');
+  });
+
+  it('works with a selector method', () => {
+    const CounterShowWithSelector: React.FC<{ name: string }> = ({ name }) => {
+      const count = useParentState(state => state[name], 0);
+      return <div className={`counterShow-${name}`}>{count}</div>;
+    };
+
+    const { container, getByText } = render(
+      <Vessel name="test1">
+        <CounterShowWithSelector name="count" />
+        <CounterWithModel name="count" />
+        <CounterButtons name="count" />
+      </Vessel>,
+    );
+
+    expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('0');
+    fireEvent.click(getByText('Increment count'));
+    expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('1');
+  });
+
+  it('unmounts cleanly', () => {
+    function CounterWithToggle() {
+      const [rendered, setRendered] = useState(true);
+
+      return (
+        <>
+          {rendered && <Counter name="count" />}
+
+          <button type="button" onClick={() => setRendered(!rendered)}>
+            Toggle Counter
+          </button>
+        </>
+      );
+    }
+
+    const { container, getByText } = render(
+      <Vessel name="test">
+        <CounterWithToggle />
+        <CounterShow name="count" />
+        <CounterButtons name="count" />
+      </Vessel>,
+    );
+
+    expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('0');
+    fireEvent.click(getByText('Increment count'));
+    expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('1');
+
+    // unmount the counter
+    fireEvent.click(getByText('Toggle Counter'));
+
+    // count should still be '1' because we unmounted the counter
+    fireEvent.click(getByText('Increment count'));
+    expect(container.querySelector(`.counterShow-count`)!.textContent).toEqual('1');
+  });
+
+  describe('', () => {
+    beforeEach(() => {
+      jest.spyOn(console, 'error');
+      // @ts-ignore
+      console.error.mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      // @ts-ignore
+      console.error.mockRestore();
+    });
+
+    it('throws with wrong action types', () => {
+      function IncorrectCounter() {
+        return (
+          <>
+            <Reducer model="count" action="a/b/c/d" reducer={state => state} />
+          </>
+        );
+      }
+
+      expect(() => {
+        render(
+          <Vessel name="test">
+            <IncorrectCounter />
+          </Vessel>,
+        );
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it('throws if cannot resolve a model', () => {
+      function IncorrectCounter() {
+        return (
+          <>
+            <Reducer action="increment" reducer={state => state} />
+          </>
+        );
+      }
+
+      expect(() => {
+        render(
+          <Vessel name="test">
+            <IncorrectCounter />
+          </Vessel>,
+        );
+      }).toThrowErrorMatchingSnapshot();
+    });
+  });
+});
+
+test('complementActionName works with different levels', () => {
+  expect(complementActionName({ action: 'increment', model: 'count', vessel: 'vessel' })).toEqual(
+    'vessel/count/increment',
+  );
+
+  expect(
+    complementActionName({ action: 'increment', model: 'count', vessel: 'vessel', level: 2 }),
+  ).toEqual('count/increment');
+
+  expect(
+    complementActionName({ action: 'increment', model: 'count', vessel: 'vessel', level: 1 }),
+  ).toEqual('increment');
 });
