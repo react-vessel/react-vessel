@@ -21,17 +21,14 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'import/no-extraneous-dependencies': [
-      'error',
-      { devDependencies: ['**/*.test.tsx'] },
-    ],
     'import/prefer-default-export': 'off', // typescript community doesn't like default exports
     'react/prop-types': 'off', // we pretty much guarantee this with typescript
-    'react/jsx-filename-extension': [
-      1,
-      { extensions: ['.js', '.jsx', '.tsx'] },
-    ],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx'] }],
     'max-len': ['error', { code: 100 }],
+    '@typescript-eslint/explicit-function-return-type': [
+      'warn',
+      { allowTypedFunctionExpressions: true },
+    ],
   },
   settings: {
     'import/extensions': allExtensions,
@@ -44,4 +41,14 @@ module.exports = {
       },
     },
   },
+  overrides: [
+    {
+      files: ['**/__tests__/**/*.{ts,tsx}'],
+      rules: {
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off'
+      }
+    }
+  ]
 };
