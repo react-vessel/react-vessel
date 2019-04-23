@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore node_modules cache
+          keys:
+            - v1-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - v1-node-{{ arch }}-{{ .Branch }}-
+            - v1-node-{{ arch }}-
+      - run:
+          name: Nodejs Version
+          command: node --version
+
+      - run:
+          name: Install Packages
+          command: yarn install --frozen-lockfile
+
+      - run:
+          name: Test Code
+          command: yarn ci:test
+
+      - run:
+          name: Upload Coverage
+          command: yarn ci:coverage
+          # command: echo $PATH
+
+      # - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+      #     path: coverage
+      #     prefix: coverage
+
+      - save_cache:
+          name: Save node_modules cache
+          key: v1-node-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules

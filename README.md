@@ -1,5 +1,7 @@
 # React Vessel
 
+[![codecov](https://codecov.io/gh/react-vessel/react-vessel/branch/master/graph/badge.svg)](https://codecov.io/gh/react-vessel/react-vessel)
+
 A vessel for your state
 
 Build your applications with composing dynamic reducers through JSX api.
