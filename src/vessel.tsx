@@ -4,7 +4,7 @@ import get from 'lodash.get';
 import { ReducerType, Dispatch } from './types';
 import { usePersistentMap } from './usePersistentMap';
 import { VesselContextType, VesselProps, VesselContext } from './vesselContext';
-import { complementActionName } from './utils';
+import { complementActionType } from './utils';
 import { useEventBus } from './eventBus';
 
 const RE_REDUCER_KEY = /(.*):(.*)\/(.*)/;
@@ -54,7 +54,7 @@ function useVessel(name: string): VesselContextType {
   const [state, originalDispatch] = useReducer<ReducerType<any, any>>(reducer, {});
   const dispatch = useCallback<Dispatch<any>>(
     (originalAction): void => {
-      const actionType = complementActionName({ vessel: name, action: originalAction.type });
+      const actionType = complementActionType({ vessel: name, action: originalAction.type });
       const action = {
         type: actionType,
         payload: originalAction.payload,

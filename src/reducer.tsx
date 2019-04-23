@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { ReducerType } from './types';
 import { useStaticCallback } from './useStaticCallback';
 import { useParentVessel } from './vessel';
-import { complementActionName } from './utils';
+import { complementActionType } from './utils';
 import { useParentModel } from './model';
 
 interface ReducerProps {
@@ -19,7 +19,7 @@ export const Reducer: React.FC<ReducerProps> = ({ model, action, reducer }) => {
 
   const currentModel = model || parentModel;
 
-  const fullActionName = complementActionName({
+  const fullActionName = complementActionType({
     action,
     model: currentModel,
     vessel: vessel.name,

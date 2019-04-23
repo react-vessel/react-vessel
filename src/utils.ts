@@ -5,7 +5,7 @@ interface ActionNameParams {
   level?: number;
 }
 
-export function complementActionName({
+export function complementActionType({
   action,
   model,
   vessel,

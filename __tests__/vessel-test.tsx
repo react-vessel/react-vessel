@@ -1,6 +1,6 @@
 import React from 'react';
 import { cleanup, fireEvent, render } from 'react-testing-library';
-import { complementActionName } from '../src/utils';
+import { complementActionType } from '../src/utils';
 import { Vessel } from '../src/vessel';
 import { WithVessel } from '../src/withVessel';
 import { CounterButtons, CounterWithModel } from './utils/counter';
@@ -21,17 +21,17 @@ describe('Vessel', () => {
   });
 });
 
-test('complementActionName works with different levels', () => {
-  expect(complementActionName({ action: 'increment', model: 'count', vessel: 'vessel' })).toEqual(
+test('complementActionType works with different levels', () => {
+  expect(complementActionType({ action: 'increment', model: 'count', vessel: 'vessel' })).toEqual(
     'vessel/count/increment',
   );
 
   expect(
-    complementActionName({ action: 'increment', model: 'count', vessel: 'vessel', level: 2 }),
+    complementActionType({ action: 'increment', model: 'count', vessel: 'vessel', level: 2 }),
   ).toEqual('count/increment');
 
   expect(
-    complementActionName({ action: 'increment', model: 'count', vessel: 'vessel', level: 1 }),
+    complementActionType({ action: 'increment', model: 'count', vessel: 'vessel', level: 1 }),
   ).toEqual('increment');
 });
 

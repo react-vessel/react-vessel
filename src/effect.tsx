@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useStaticCallback } from './useStaticCallback';
 import { useEventBus } from './eventBus';
 import { Action } from './types';
-import { complementActionName } from './utils';
+import { complementActionType } from './utils';
 import { useParentVessel } from './vessel';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,7 +17,7 @@ export const Effect: React.FC<EffectProps> = ({ on, run }) => {
   const vessel = useParentVessel();
   const eventBus = useEventBus();
   const staticCallback = useStaticCallback(run);
-  const action = complementActionName({ action: on, vessel: vessel.name });
+  const action = complementActionType({ action: on, vessel: vessel.name });
 
   useEffect((): (() => void) => {
     eventBus.on(action, staticCallback);
