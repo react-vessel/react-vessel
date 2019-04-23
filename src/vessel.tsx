@@ -5,6 +5,7 @@ import { ReducerType, Dispatch } from './types';
 import { usePersistentMap } from './usePersistentMap';
 import { VesselContextType, VesselProps, VesselContext } from './vesselContext';
 import { complementActionName } from './utils';
+import { useEventBus } from './eventBus';
 
 const RE_REDUCER_KEY = /(.*):(.*)\/(.*)/;
 
@@ -22,6 +23,7 @@ function parseReducerKey(key: string): [string, string] {
 
 function useVessel(name: string): VesselContextType {
   const [getReducers, setReducer] = usePersistentMap<ReducerType<any, any>>();
+  const eventBus = useEventBus();
 
   const reducer = useCallback<ReducerType<any, any>>((state, action): any => {
     const reducers = getReducers();
@@ -51,11 +53,15 @@ function useVessel(name: string): VesselContextType {
 
   const [state, originalDispatch] = useReducer<ReducerType<any, any>>(reducer, {});
   const dispatch = useCallback<Dispatch<any>>(
-    (action): void => {
-      originalDispatch({
-        type: complementActionName({ vessel: name, action: action.type }),
-        payload: action.payload,
-      });
+    (originalAction): void => {
+      const actionType = complementActionName({ vessel: name, action: originalAction.type });
+      const action = {
+        type: actionType,
+        payload: originalAction.payload,
+      };
+
+      originalDispatch(action);
+      eventBus.emit(actionType, action);
     },
     [name, originalDispatch],
   );

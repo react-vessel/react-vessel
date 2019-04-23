@@ -3,7 +3,3 @@
 exports[`Reducer  throws if cannot resolve a model 1`] = `"Could not resolve a model"`;
 
 exports[`Reducer  throws with wrong action types 1`] = `"Given action 'a/b/c/d' does not match the format: [vessel]/[model]/action"`;
-
-exports[`Vessel renders with a name 1`] = `<DocumentFragment />`;
-
-exports[`Vessel renders without a name 1`] = `<DocumentFragment />`;

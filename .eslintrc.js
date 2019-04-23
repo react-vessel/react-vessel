@@ -47,7 +47,8 @@ module.exports = {
       rules: {
         'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
         '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-non-null-assertion': 'off'
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        'no-console': 'off'
       }
     }
   ]

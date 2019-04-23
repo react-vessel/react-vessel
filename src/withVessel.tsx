@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { Dispatch } from './types';
 import { useParentState, useParentVessel } from './vessel';
+import { VesselContextType } from './vesselContext';
 
 interface WithVesselProps {
   select: string;
   default?: any;
-  render: (selectedState: any, params: { state: any; dispatch: Dispatch<any> }) => JSX.Element;
+  render: (selectedState: any, vessel: VesselContextType) => JSX.Element;
 }
 
 export const WithVessel: React.FC<WithVesselProps> = ({
@@ -14,7 +14,7 @@ export const WithVessel: React.FC<WithVesselProps> = ({
   default: defaultValue,
   render,
 }) => {
-  const { state, dispatch } = useParentVessel();
+  const vessel = useParentVessel();
   const selectedState = useParentState(select, defaultValue);
-  return render(selectedState, { state, dispatch });
+  return render(selectedState, vessel);
 };

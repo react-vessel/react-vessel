@@ -48,16 +48,9 @@ function Dashboard() {
           <Reducer action="decrement" reducer={state => state - 1} />
         </Model>
 
-        <WithState select="input.value" render={({ state, dispatch }) => {
-          return <p>{state}</p>
+        <WithVessel select="input.value" render={(value, { state, dispatch }) => {
+          return <p>{value}</p>
         }} />
-
-        <Dispatch withModel="count" render={dispatch => {
-          return <button onClick={() => dispatch({ type: 'count/increment' })} />
-        }} />
-
-        {/* low priority */}
-        <WithVessel source="other-vessel" select="input.value" render={} />
 
         <Model name="doubleCount">
           <Reducer action="count/increment" reducer={state => state + 2} />
