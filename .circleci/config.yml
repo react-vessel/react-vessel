@@ -24,6 +24,10 @@ jobs:
           command: yarn ci:test
 
       - run:
+          name: Build
+          command: yarn build
+
+      - run:
           name: Upload Coverage
           command: yarn ci:coverage
 
