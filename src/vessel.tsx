@@ -93,7 +93,7 @@ export function useParentState<T>(selector: string | StateSelector<T>, defaultVa
   return value;
 }
 
-export const Vessel: React.FC<VesselProps> = ({ name = 'default-vessel', children }) => {
+export const Vessel: React.FC<VesselProps> = ({ name = 'app', children }) => {
   const vessel = useVessel(name);
   return <VesselContext.Provider value={vessel}>{children}</VesselContext.Provider>;
 };
