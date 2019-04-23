@@ -2,7 +2,130 @@
 
 A vessel for your state
 
-This library will allow you to do something like following:
+Build your applications with composing dynamic reducers through JSX api.
+
+- [React Vessel](#react-vessel)
+  - [Installation](#installation)
+  - [What you can do with it](#what-you-can-do-with-it)
+    - [You can write a simple counter like this](#you-can-write-a-simple-counter-like-this)
+    - [You can access this state anywhere in your application](#you-can-access-this-state-anywhere-in-your-application)
+    - [You can add/remove reducers dynamically](#you-can-addremove-reducers-dynamically)
+    - [You can combine multiple reducers inside a Model](#you-can-combine-multiple-reducers-inside-a-model)
+    - [You can build a simple FormInput](#you-can-build-a-simple-forminput)
+
+## Installation
+
+Install react-vessel:
+
+```sh
+npm install react-vessel
+```
+
+or with yarn:
+
+```sh
+yarn add react-vessel
+```
+
+## What you can do with it
+
+### You can write a simple counter like this
+
+Here is the simplest thing you can do with a vessel.
+
+```jsx
+import React from 'react';
+import { Vessel, Reducer } from 'react-vessel';
+
+function Counter({ name }) {
+  const { dispatch } = useParentVessel();
+  const count = useParentState(name, 0);
+
+  return (
+    <div>
+      <Reducer model={name} action="increment" reducer={(state = 0) => state + 1} />
+      <Reducer model={name} action="decrement" reducer={(state = 0) => state - 1} />
+      <div>{count}</div>
+      <button type="button" onClick={() => dispatch({ type: 'count/increment' })}>
+        Increment
+      </button>
+      <button type="button" onClick={() => dispatch({ type: 'count/decrement' })}>
+        Decrement
+      </button>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Vessel>
+      <Counter name="counter1" />
+      <Counter name="counter2" />
+    </Vessel>
+  );
+}
+```
+
+Notice how you could easily reuse the component.
+
+Above code will produce following state in your vessel:
+
+```json
+{
+  "counter1": 0,
+  "counter2": 0
+}
+```
+
+### You can access this state anywhere in your application
+
+```jsx
+function MyComponent() {
+  const count = useParentState('counter1', 0);
+  return <div>{count}</div>;
+}
+```
+
+Or you can use a component with render props if you prefer that:
+
+```jsx
+function MyComponent() {
+  return <WithVessel select="counter1" render={(count, { state, dispatch }) => {
+    return <div>{count}</div>
+  }}>
+}
+```
+
+### You can add/remove reducers dynamically
+
+```jsx
+function MyComponent() {
+  const [incrementEnabled, setIncrementEnabled] = useState();
+
+  return (
+    <>
+      {incrementEnabled && (
+        <Reducer model="my-counter" action="increment" reducer={(state = 0) => state + 1} />
+      )}
+      <Reducer model="my-counter" action="decrement" reducer={(state = 0) => state - 1} />
+      <button type="button" onClick={() => setIncrementEnabled(!incrementEnabled)}>
+        Enable/Disable Increment
+      </button>
+    </>
+  );
+}
+```
+
+### You can combine multiple reducers inside a Model
+
+```jsx
+<Model name="my-counter">
+  <Reducer action="increment" reducer={(state = 0) => state + 1} />
+  <Reducer action="decrement" reducer={(state = 0) => state - 1} />
+</Model>
+```
+
+### You can build a simple FormInput
 
 ```jsx
 function FormInput({ name, render }) {
@@ -15,18 +138,17 @@ function FormInput({ name, render }) {
 
   return (
     <>
-      <Model name={name}>
-        <Reducer
-          action="change"
-          reducer={(state, payload) => ({ ...state, value: payload })}
-        />
-      </Model>
+      <Reducer
+        model={name}
+        action="change"
+        reducer={(state, payload) => ({ ...state, value: payload })}
+      />
       {render({ onChange, value })}
     </>
   );
 }
 
-function SmartInput({ name }) {
+function TextInput({ name }) {
   return (
     <FormInput
       name={name}
@@ -37,34 +159,18 @@ function SmartInput({ name }) {
   );
 }
 
-function Dashboard() {
+function App() {
   return (
-    <>
-      <Vessel>
-        <SmartInput name="smart-input" />
+    <Vessel>
+      <TextInput name="smart-input" />
 
-        <Model name="count">
-          <Reducer action="increment" reducer={state => state + 1} />
-          <Reducer action="decrement" reducer={state => state - 1} />
-        </Model>
-
-        <WithVessel select="input.value" render={(value, { state, dispatch }) => {
-          return <p>{value}</p>
-        }} />
-
-        <Model name="doubleCount">
-          <Reducer action="count/increment" reducer={state => state + 2} />
-          <Reducer action="count/decrement" reducer={state => state - 2} />
-        </Model>
-
-        <button onClick={() => dispatch({ type: 'count/increment' })}>
-          increment
-        </button>
-        <button onClick={() => dispatch({ type: 'count/decrement' })}>
-          decrement
-        </button>
-      </Vessel>
-    </>
+      <WithVessel
+        select="input.value"
+        render={(value, { state, dispatch }) => {
+          return <p>{value}</p>;
+        }}
+      />
+    </Vessel>
   );
 }
 ```
