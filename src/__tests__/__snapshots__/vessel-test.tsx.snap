@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Vessel renders with a name 1`] = `<DocumentFragment />`;
+
+exports[`Vessel renders without a name 1`] = `<DocumentFragment />`;
