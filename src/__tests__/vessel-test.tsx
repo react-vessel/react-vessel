@@ -5,6 +5,7 @@ import { Reducer } from '../reducer';
 import { Vessel, useParentState, useParentVessel } from '../vessel';
 import { Model } from '../model';
 import { complementActionName } from '../utils';
+import { WithVessel } from '../withVessel';
 
 const CounterWithModel: React.FC<{ name: string }> = ({ name }) => {
   return (
@@ -86,7 +87,7 @@ describe('Reducer', () => {
 
   it('works with a model', () => {
     const { container, getByText } = render(
-      <Vessel name="test1">
+      <Vessel name="test">
         <CounterWithModel name="count" />
         <CounterShow name="count" />
         <CounterButtons name="count" />
@@ -105,7 +106,7 @@ describe('Reducer', () => {
     };
 
     const { container, getByText } = render(
-      <Vessel name="test1">
+      <Vessel name="test">
         <CounterShowWithSelector name="count" />
         <CounterWithModel name="count" />
         <CounterButtons name="count" />
@@ -214,4 +215,74 @@ test('complementActionName works with different levels', () => {
   expect(
     complementActionName({ action: 'increment', model: 'count', vessel: 'vessel', level: 1 }),
   ).toEqual('increment');
+});
+
+describe('WithVessel', () => {
+  it('works without default value', () => {
+    const { container, getByText } = render(
+      <Vessel name="test">
+        <CounterWithModel name="count" />
+        <WithVessel
+          select="count"
+          render={count => {
+            return <div className="count-element">{count}</div>;
+          }}
+        />
+        <CounterButtons name="count" />
+      </Vessel>,
+    );
+
+    expect(container.querySelector(`.count-element`)!.textContent).toEqual('');
+    fireEvent.click(getByText('Increment count'));
+    expect(container.querySelector(`.count-element`)!.textContent).toEqual('1');
+  });
+
+  it('works with default value', () => {
+    const { container, getByText } = render(
+      <Vessel name="test">
+        <CounterWithModel name="count" />
+        <WithVessel
+          select="count"
+          default={0}
+          render={count => {
+            return <div className="count-element">{count}</div>;
+          }}
+        />
+        <CounterButtons name="count" />
+      </Vessel>,
+    );
+
+    expect(container.querySelector(`.count-element`)!.textContent).toEqual('0');
+    fireEvent.click(getByText('Increment count'));
+    expect(container.querySelector(`.count-element`)!.textContent).toEqual('1');
+  });
+
+  it('brings dispatch', () => {
+    const { container, getByText } = render(
+      <Vessel name="test">
+        <CounterWithModel name="count" />
+        <WithVessel
+          select="count"
+          default={0}
+          render={(count, { dispatch }) => {
+            return (
+              <>
+                <div className="count-element">{count}</div>
+                <button type="button" onClick={() => dispatch({ type: 'count/increment' })}>
+                  Increment count
+                </button>
+                <button type="button" onClick={() => dispatch({ type: 'count/decrement' })}>
+                  Decrement count
+                </button>
+              </>
+            );
+          }}
+        />
+      </Vessel>,
+    );
+
+    expect(container.querySelector(`.count-element`)!.textContent).toEqual('0');
+    fireEvent.click(getByText('Increment count'));
+    expect(container.querySelector(`.count-element`)!.textContent).toEqual('1');
+  });
 });
