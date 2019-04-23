@@ -104,7 +104,7 @@ function MyComponent() {
   const [incrementEnabled, setIncrementEnabled] = useState();
 
   return (
-    <>
+    <React.Fragment>
       {incrementEnabled && (
         <Reducer model="my-counter" action="increment" reducer={(state = 0) => state + 1} />
       )}
@@ -112,7 +112,7 @@ function MyComponent() {
       <button type="button" onClick={() => setIncrementEnabled(!incrementEnabled)}>
         Enable/Disable Increment
       </button>
-    </>
+    </React.Fragment>
   );
 }
 ```
@@ -138,14 +138,14 @@ function FormInput({ name, render }) {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Reducer
         model={name}
         action="change"
         reducer={(state, payload) => ({ ...state, value: payload })}
       />
       {render({ onChange, value })}
-    </>
+    </React.Fragment>
   );
 }
 
