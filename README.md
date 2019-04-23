@@ -12,6 +12,7 @@ Build your applications with composing dynamic reducers through JSX api.
     - [You can add/remove reducers dynamically](#you-can-addremove-reducers-dynamically)
     - [You can combine multiple reducers inside a Model](#you-can-combine-multiple-reducers-inside-a-model)
     - [You can build a simple FormInput](#you-can-build-a-simple-forminput)
+    - [You can write effects that runs after an action](#you-can-write-effects-that-runs-after-an-action)
 
 ## Installation
 
@@ -170,6 +171,39 @@ function App() {
           return <p>{value}</p>;
         }}
       />
+    </Vessel>
+  );
+}
+```
+
+### You can write effects that runs after an action
+
+```jsx
+function ValidateUsername() {
+  const { dispatch } = useParentVessel();
+  return (
+    <Reducer model="username" action="validate-suc" reducer={(state) => ({ ...state, error: null })} />
+    <Reducer model="username" action="validate-err" reducer={(state, payload) => ({ ...state, error: payload })} />
+    <Effect
+      on="username/changed"
+      run={async action => {
+        try {
+          await api.validateUsername(action.payload);
+          dispatch({ type: 'username/validate-suc' });
+        } catch (err) {
+          dispatch({ type: 'username/validate-err', payload: err.message });
+        }
+      }}
+    />
+  );
+}
+
+function App() {
+  return (
+    <Vessel>
+      <TextInput name="username" />
+
+      <ValidateUsername />
     </Vessel>
   );
 }
