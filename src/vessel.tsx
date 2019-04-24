@@ -25,31 +25,34 @@ function useVessel(name: string): VesselContextType {
   const [getReducers, setReducer] = usePersistentMap<ReducerType<any, any>>();
   const eventBus = useEventBus();
 
-  const reducer = useCallback<ReducerType<any, any>>((state, action): any => {
-    const reducers = getReducers();
+  const reducer = useCallback<ReducerType<any, any>>(
+    (state, action): any => {
+      const reducers = getReducers();
 
-    const reducerKeys = Object.keys(reducers);
-    const nextState = { ...state };
-    let hasChanged = false;
+      const reducerKeys = Object.keys(reducers);
+      const nextState = { ...state };
+      let hasChanged = false;
 
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < reducerKeys.length; i++) {
-      // reducerKey is in the format hostModel:model/action
-      const reducerKey = reducerKeys[i];
-      const [model, reducerAction] = parseReducerKey(reducerKey);
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < reducerKeys.length; i++) {
+        // reducerKey is in the format hostModel:model/action
+        const reducerKey = reducerKeys[i];
+        const [model, reducerAction] = parseReducerKey(reducerKey);
 
-      if (reducerAction === action.type) {
-        const currentReducer = reducers[reducerKey];
-        const nextStateForModel = currentReducer(nextState[model], action.payload);
-        if (nextStateForModel !== nextState[model]) {
-          hasChanged = true;
-          nextState[model] = nextStateForModel;
+        if (reducerAction === action.type) {
+          const currentReducer = reducers[reducerKey];
+          const nextStateForModel = currentReducer(nextState[model], action.payload);
+          if (nextStateForModel !== nextState[model]) {
+            hasChanged = true;
+            nextState[model] = nextStateForModel;
+          }
         }
       }
-    }
 
-    return hasChanged ? nextState : state;
-  }, []);
+      return hasChanged ? nextState : state;
+    },
+    [getReducers],
+  );
 
   const [state, originalDispatch] = useReducer<ReducerType<any, any>>(reducer, {});
   const dispatch = useCallback<Dispatch<any>>(
@@ -63,7 +66,7 @@ function useVessel(name: string): VesselContextType {
       originalDispatch(action);
       eventBus.emit(actionType, action);
     },
-    [name, originalDispatch],
+    [eventBus, name],
   );
 
   const vessel = useMemo((): VesselContextType => {

@@ -8,6 +8,7 @@ module.exports = {
     node: true,
     browser: true,
   },
+  plugins: ['react-hooks'],
   extends: [
     'airbnb',
     'plugin:@typescript-eslint/recommended',
@@ -29,6 +30,8 @@ module.exports = {
       'warn',
       { allowTypedFunctionExpressions: true },
     ],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
   settings: {
     'import/extensions': allExtensions,
@@ -48,8 +51,8 @@ module.exports = {
         'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
-        'no-console': 'off'
-      }
-    }
-  ]
+        'no-console': 'off',
+      },
+    },
+  ],
 };

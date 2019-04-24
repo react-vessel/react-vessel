@@ -14,7 +14,7 @@ interface ReducerProps {
 
 export const Reducer: React.FC<ReducerProps> = ({ model, action, reducer }) => {
   const parentModel = useParentModel();
-  const vessel = useParentVessel();
+  const { name: vesselName, setReducer } = useParentVessel();
   const staticReducer = useStaticCallback(reducer);
 
   const currentModel = model || parentModel;
@@ -22,16 +22,17 @@ export const Reducer: React.FC<ReducerProps> = ({ model, action, reducer }) => {
   const fullActionName = complementActionType({
     action,
     model: currentModel,
-    vessel: vessel.name,
+    vessel: vesselName,
   });
+
   useEffect((): (() => void) => {
     const reducerName = `${currentModel}:${fullActionName}`;
-    vessel.setReducer(reducerName, staticReducer);
+    setReducer(reducerName, staticReducer);
 
     return (): void => {
-      vessel.setReducer(reducerName, undefined);
+      setReducer(reducerName, undefined);
     };
-  }, [fullActionName, staticReducer]);
+  }, [currentModel, fullActionName, staticReducer, setReducer]);
 
   return null;
 };

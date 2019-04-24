@@ -25,7 +25,7 @@ export const Effect: React.FC<EffectProps> = ({ on, run }) => {
     return (): void => {
       eventBus.off(action, staticCallback);
     };
-  }, [action, run]);
+  }, [eventBus, staticCallback, action, run]);
 
   return null;
 };
