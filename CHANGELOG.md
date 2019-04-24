@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/yasinuslu/react-vessel/compare/v0.2.0...v0.2.1) (2019-04-24)
+
+
+### Bug Fixes
+
+* fix export issue ([263d429](https://github.com/yasinuslu/react-vessel/commit/263d429))
+
+
+
 # [0.2.0](https://github.com/yasinuslu/react-vessel/compare/6564a58...v0.2.0) (2019-04-24)
 
 
