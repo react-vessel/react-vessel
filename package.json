@@ -1,7 +1,7 @@
 {
   "name": "react-vessel",
   "description": "A different approach for managing your state in react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "lib/index.js",
   "repository": "git@github.com:yasinuslu/react-vessel.git",
   "author": "Yasin Uslu <nepjua@gmail.com>",
