@@ -16,7 +16,8 @@
     "build": "tsc -p tsconfig.build.json",
     "ci:test": "yarn lint && yarn test",
     "ci:coverage": "codecov",
-    "release:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "release:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "release": "rm -rf lib/ && yarn build && np"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
