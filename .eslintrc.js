@@ -43,7 +43,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/__tests__/**/*.{ts,tsx}'],
+      files: ['**/test/**/*.{ts,tsx}'],
       rules: {
         'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
         '@typescript-eslint/explicit-function-return-type': 'off',
