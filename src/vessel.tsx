@@ -66,7 +66,7 @@ function useVessel(name: string): VesselContextType {
       originalDispatch(action);
       eventBus.emit(actionType, action);
     },
-    [eventBus, name],
+    [eventBus, name, originalDispatch],
   );
 
   const vessel = useMemo((): VesselContextType => {
