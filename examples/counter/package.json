@@ -10,7 +10,7 @@
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-vessel": "^0.2.1"
+    "react-vessel": "^0.2.2"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.3"
