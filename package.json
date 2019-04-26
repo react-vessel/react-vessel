@@ -23,7 +23,7 @@
     "ci:test": "yarn lint && yarn test",
     "ci:coverage": "codecov",
     "release:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "release": "rm -rf lib/ && yarn build && np"
+    "release": "np && yarn release:changelog && git add ."
   },
   "lint-staged": {
     "*.{ts,tsx}": [
