@@ -1,14 +1,24 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "outDir": "lib",
-    "lib": ["es2015", "dom"],
-    "strict": true,
-    "esModuleInterop": true,
-    "declaration": true,
+    "outDir": "dist/ts",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "jsx": "react",
-    "skipLibCheck": true,
+    "strict": true,
+    "declaration": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "stripInternal": true,
+    "skipLibCheck": true
   },
-  "include": ["./src"]
+  "include": ["src/"]
 }
