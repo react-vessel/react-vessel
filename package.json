@@ -1,7 +1,7 @@
 {
   "name": "react-vessel",
   "description": "A different approach for managing your state in react",
-  "version": "0.2.2",
+  "version": "0.2.1",
   "repository": "git@github.com:yasinuslu/react-vessel.git",
   "author": "Yasin Uslu <nepjua@gmail.com>",
   "license": "MIT",
@@ -23,7 +23,8 @@
     "ci:test": "yarn lint && yarn test",
     "ci:coverage": "codecov",
     "release:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "release": "np && yarn release:changelog && git add ."
+    "release:changelog:commit": "git add CHANGELOG.md && git commit -m \"chore: update changelog\"",
+    "release": "np && yarn release:changelog && yarn release:changelog:commit"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
