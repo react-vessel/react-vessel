@@ -1,3 +1,11 @@
+## [0.2.1](https://github.com/yasinuslu/react-vessel/compare/v0.2.2...v0.2.1) (2019-04-26)
+
+
+
+## [0.2.2](https://github.com/yasinuslu/react-vessel/compare/v0.2.1...v0.2.2) (2019-04-26)
+
+
+
 ## [0.2.1](https://github.com/yasinuslu/react-vessel/compare/v0.2.0...v0.2.1) (2019-04-24)
 
 
