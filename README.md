@@ -1,5 +1,7 @@
 # React Vessel
 
+# Discontinued
+
 [![npm](https://img.shields.io/npm/v/react-vessel.svg)](http://npmjs.com/react-vessel) [![Codecov](https://img.shields.io/codecov/c/github/react-vessel/react-vessel/master.svg)](https://codecov.io/gh/react-vessel/react-vessel) [![CircleCI](https://img.shields.io/circleci/project/github/react-vessel/react-vessel/master.svg)](https://circleci.com/gh/react-vessel/react-vessel)
 
 A different approach for managing your state in react. Build your applications with composing dynamic reducers through JSX api.
